@@ -1,5 +1,6 @@
 package cn.tangyancode.ego.chineseChess.core;
 
+import cn.tangyancode.ego.chineseChess.entity.Move;
 import cn.tangyancode.ego.chineseChess.entity.Unit;
 
 import java.security.MessageDigest;
@@ -15,6 +16,10 @@ public class GameMap {
     public GameMap(List<Unit> units) {
         this.units = new HashSet<>(units);
         units.forEach(unit -> map[unit.x][unit.y] = unit);
+    }
+
+    public void move(Move move) {
+        move(move.unit, move.x, move.y);
     }
 
     public void move(Unit unit, int x, int y) {

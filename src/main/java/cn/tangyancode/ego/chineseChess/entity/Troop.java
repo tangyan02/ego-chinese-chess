@@ -2,21 +2,24 @@ package cn.tangyancode.ego.chineseChess.entity;
 
 public enum Troop {
 
-    CHE(1000, 'c'),
-    MA(500, 'm'),
-    XIANG(300, 'x'),
-    SHI(300, 's'),
-    JIANG(100000, 'j'),
-    PAO(500, 'p'),
-    BING(100, 'b');
+    CHE(1000, 'c', "车"),
+    MA(500, 'm' ,"马"),
+    XIANG(300, 'x',"相"),
+    SHI(300, 's',"士"),
+    JIANG(100000, 'j',"将"),
+    PAO(500, 'p',"炮"),
+    BING(100, 'b',"兵");
 
     private int value;
 
     private char letter;
 
-    Troop(int value, char letter) {
+    private String chineseValue;
+
+    Troop(int value, char letter, String chineseValue) {
         this.value = value;
         this.letter = letter;
+        this.chineseValue = chineseValue;
     }
 
     public int getValue() {
@@ -25,5 +28,9 @@ public enum Troop {
 
     public char getLetter() {
         return letter;
+    }
+
+    public String getChineseValue() {
+        return chineseValue;
     }
 }
