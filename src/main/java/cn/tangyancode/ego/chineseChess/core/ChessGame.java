@@ -26,17 +26,13 @@ public class ChessGame {
 
     private Move dfs(int level, Relation relation, int alpha, int beta, Unit currentUnit, Integer currentX, Integer currentY, boolean check) {
         count++;
-        //缓存检查，实际缓存命中率不足20%
-//        Move cacheValue = scoreCache.get(gameMap, level, alpha, beta);
-//        if (cacheValue != null) {
-//            return cacheValue;
-//        }
         if (level == 0 || check) {
             int value = ScoreCalculator.getScore(gameMap, relation);
             return new Move(currentUnit, currentX, currentY, value);
         }
         int currentMax = Integer.MIN_VALUE;
         List<MoveStep> moves = MoveRuler.getMoves(gameMap, relation);
+        MoveSorter.sort(moves, gameMap);
         Move move = new Move();
         for (MoveStep moveStep : moves) {
             Unit unit = moveStep.unit;
@@ -67,13 +63,11 @@ public class ChessGame {
                 if (value > alpha) {
                     alpha = value;
                     if (value > beta) {
-                        //scoreCache.record(gameMap, level, alpha, beta, move);
                         return move;
                     }
                 }
             }
         }
-        //scoreCache.record(gameMap, level, alpha, beta, move);
         return move;
     }
 

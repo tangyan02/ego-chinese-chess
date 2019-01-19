@@ -30,7 +30,12 @@ public class ScoreCalculator {
                     if (target.troop == Troop.JIANG) {
                         continue;
                     }
-                    attackScore += target.troop.getValue() / 100;
+                    if (unit.relation == Relation.SELF) {
+                        attackScore += target.troop.getValue() / 100;
+                    }
+                    if (unit.relation == Relation.OPPONENT) {
+                        attackScore -= target.troop.getValue() / 100;
+                    }
                 }
             }
         }

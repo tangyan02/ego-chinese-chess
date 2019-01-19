@@ -14,6 +14,7 @@ public class SelfMoveAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         ChessGame chessGame = new ChessGame(new ArrayList<>(Start.gameMap.getUnits()));
         PlayResult playResult = chessGame.play(Relation.SELF);
+        System.out.println(playResult);
         Start.gameMap.move(playResult.move);
         MapDrawer.drawMap(Start.gameMap);
     }
