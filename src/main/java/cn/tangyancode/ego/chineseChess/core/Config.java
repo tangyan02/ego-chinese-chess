@@ -6,6 +6,9 @@ public class Config {
 
     public final static int HEIGHT = 10;
 
-    public static int level = 4;
+    public static int timeLimit = 5000;
+
+    public static int level = 10;
+
 
 }

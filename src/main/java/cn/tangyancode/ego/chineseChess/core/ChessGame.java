@@ -8,23 +8,35 @@ public class ChessGame {
 
     private GameMap gameMap;
 
-    private ScoreCache scoreCache = new ScoreCache();
-
     private int count = 0;
+
+    private long startTime;
 
     public ChessGame(List<Unit> units) {
         gameMap = new GameMap(units);
     }
 
     public PlayResult play(Relation relation) {
-        count = 0;
-        int alpha = Integer.MIN_VALUE / 2;
-        int beta = Integer.MAX_VALUE / 2;
-        Move move = dfs(Config.level, relation, alpha, beta, null, null, null, false);
-        return new PlayResult(move, count);
+        Move result = null;
+        for (int level = 2; level <= Config.level; level += 2) {
+            int alpha = Integer.MIN_VALUE / 2;
+            int beta = Integer.MAX_VALUE / 2;
+            startTime = System.currentTimeMillis();
+            count = 0;
+            Move move = dfs(level, relation, alpha, beta, null, null, null, false);
+            if (move == null) {
+                break;
+            }
+            result = move;
+            System.out.println("level:" + level + " " + move + " count:" + count);
+        }
+        return new PlayResult(result, count);
     }
 
     private Move dfs(int level, Relation relation, int alpha, int beta, Unit currentUnit, Integer currentX, Integer currentY, boolean check) {
+        if (System.currentTimeMillis() - startTime > Config.timeLimit) {
+            return null;
+        }
         count++;
         if (level == 0 || check) {
             int value = ScoreCalculator.getScore(gameMap, relation);
@@ -36,7 +48,6 @@ public class ChessGame {
         Move move = new Move();
         for (MoveStep moveStep : moves) {
             Unit unit = moveStep.unit;
-
             int fromX = unit.x;
             int fromY = unit.y;
             int toX = moveStep.x;
@@ -55,6 +66,9 @@ public class ChessGame {
             gameMap.move(unit, toX, toY);
             Move result = dfs(level - 1, relation.getOther(), -beta, -alpha, targetUnit, toX, toY, check);
             gameMap.undoMove(unit, fromX, fromY, targetUnit);
+            if (result == null) {
+                return null;
+            }
             check = false;
             int value = -result.value;
             if (value > currentMax) {
