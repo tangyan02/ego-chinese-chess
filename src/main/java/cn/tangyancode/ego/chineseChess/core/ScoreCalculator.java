@@ -36,13 +36,13 @@ public class ScoreCalculator {
             return delta + sigma;
         }
         if (unit.troop == Troop.BING) {
-            int delta = 5 * -getDistanceFromJiang(gameMap, unit, unit.relation.getOther());
+            int delta = 2 * -getDistanceFromJiang(gameMap, unit, unit.relation.getOther());
             int sigma = Math.min(2, unit.moveTimes) * 40;
-            return sigma;
+            return sigma + delta;
         }
         if (unit.troop == Troop.PAO) {
             //棋子数量决定炮的衰减
-            return -(32 - gameMap.getUnits().size()) * 10;
+            return -(32 - gameMap.getUnits().size()) * 5;
         }
         if (unit.troop == Troop.SHI || unit.troop == Troop.XIANG) {
             int sigma = Math.min(1, unit.moveTimes) * 10;
