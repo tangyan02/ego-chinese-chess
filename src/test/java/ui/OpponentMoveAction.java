@@ -1,6 +1,7 @@
 package ui;
 
 import cn.tangyancode.ego.chineseChess.core.ChessGame;
+import cn.tangyancode.ego.chineseChess.core.GameMap;
 import cn.tangyancode.ego.chineseChess.entity.PlayResult;
 import cn.tangyancode.ego.chineseChess.entity.Relation;
 
@@ -15,7 +16,14 @@ public class OpponentMoveAction implements ActionListener {
         ChessGame chessGame = new ChessGame(new ArrayList<>(Start.gameMap.getUnits()));
         PlayResult playResult = chessGame.play(Relation.OPPONENT);
         System.out.println(playResult);
-        Start.gameMap.move(playResult.move);
+        Start.stack.push(
+                new MoveRecord(
+                        playResult.move.unit,
+                        Start.gameMap.getUnit(playResult.move.x, playResult.move.y),
+                        playResult.move.unit.x,
+                        playResult.move.unit.y)
+        );
+        Start.gameMap.move(playResult.move.unit, playResult.move.x, playResult.move.y);
         MapDrawer.drawMap(Start.gameMap);
     }
 

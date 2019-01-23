@@ -1,16 +1,20 @@
 package ui;
 
 import cn.tangyancode.ego.chineseChess.core.GameMap;
+import cn.tangyancode.ego.chineseChess.entity.Unit;
 import util.MapProvider;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Stack;
 
 public class Start {
 
     static JFrame frame = new JFrame("ego chinese ai");
     static GameMap gameMap = MapProvider.getGameMap("default.txt");
+    static Unit prepareUnit = null;
+    static Stack<MoveRecord> stack = new Stack<>();
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -28,6 +32,15 @@ public class Start {
         OpponentMoveButton.setBounds(200, 500, 150, 40);
         frame.getContentPane().add(OpponentMoveButton);
         OpponentMoveButton.addActionListener(new OpponentMoveAction());
+
+
+        JButton BackUpButton = new JButton();
+        BackUpButton.setText("上一步");
+        BackUpButton.setBounds(410, 500, 150, 40);
+        frame.getContentPane().add(BackUpButton);
+        BackUpButton.addActionListener(new BackUpAction());
+
+        frame.addMouseListener(new FrameMouseAction());
 
 
         frame.setVisible(true);

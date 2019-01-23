@@ -33,7 +33,7 @@ public class MoveStep {
     @Override
     public String toString() {
         return "MoveStep{" +
-                "unit=" + unit +
+                "from=" + unit +
                 ", x=" + x +
                 ", y=" + y +
                 ", value=" + value +

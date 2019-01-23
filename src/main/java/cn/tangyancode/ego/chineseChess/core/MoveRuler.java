@@ -171,11 +171,11 @@ public class MoveRuler {
                 points.add(new Point(x, y));
             }
             if (!inSide(unit.x, unit.relation)) {
-                if (gameMap.moveOrAttackAble(x, y - 1)) {
-                    points.add(new Point(x, y - 1));
+                if (gameMap.moveOrAttackAble(unit.x, y - 1)) {
+                    points.add(new Point(unit.x, y - 1));
                 }
                 if (gameMap.moveOrAttackAble(x, y + 1)) {
-                    points.add(new Point(x, y + 1));
+                    points.add(new Point(unit.x, y + 1));
                 }
             }
         }

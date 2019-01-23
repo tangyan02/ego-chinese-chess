@@ -1,11 +1,11 @@
 package cn.tangyancode.ego.chineseChess.core;
 
-import cn.tangyancode.ego.chineseChess.entity.Move;
-import cn.tangyancode.ego.chineseChess.entity.Unit;
+import cn.tangyancode.ego.chineseChess.entity.*;
 
-import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class GameMap {
 
@@ -13,18 +13,41 @@ public class GameMap {
 
     private Unit[][] map = new Unit[Config.HEIGHT][Config.WIDTH];
 
-    public GameMap(List<Unit> units) {
-        this.units = new HashSet<>(units);
-        units.forEach(unit -> map[unit.x][unit.y] = unit);
+    private Map<Relation, Point> JIANGPoint = new HashMap<>();
+
+    private Map<Relation, Map<Troop, Integer>> relationTroopCount = new HashMap<>();
+
+    {
+        relationTroopCount.put(Relation.SELF, new HashMap<>());
+        relationTroopCount.put(Relation.OPPONENT, new HashMap<>());
     }
 
-    public void move(Move move) {
-        move(move.unit, move.x, move.y);
+    public GameMap(List<Unit> units) {
+        this.units = new HashSet<>(units);
+        units.forEach(unit -> {
+            map[unit.x][unit.y] = unit;
+
+            //将的记录
+            if (unit.troop == Troop.JIANG) {
+                JIANGPoint.put(unit.relation, new Point(unit.x, unit.y));
+            }
+
+            //数量记录
+            if (!relationTroopCount.get(unit.relation).containsKey(unit.troop)) {
+                relationTroopCount.get(unit.relation).put(unit.troop, 0);
+            }
+            relationTroopCount.get(unit.relation).put(unit.troop, relationTroopCount.get(unit.relation).get(unit.troop) + 1);
+        });
     }
 
     public void move(Unit unit, int x, int y) {
+        unit.moveTimes++;
         if (map[x][y] != null) {
             units.remove(map[x][y]);
+            relationTroopCount.get(unit.relation).put(
+                    unit.troop,
+                    relationTroopCount.get(unit.relation).get(unit.troop) - 1
+            );
         }
         map[unit.x][unit.y] = null;
         map[x][y] = unit;
@@ -33,9 +56,14 @@ public class GameMap {
     }
 
     public void undoMove(Unit unit, int x, int y, Unit last) {
+        unit.moveTimes--;
         map[unit.x][unit.y] = last;
         if (last != null) {
             units.add(last);
+            relationTroopCount.get(last.relation).put(
+                    last.troop,
+                    relationTroopCount.get(last.relation).get(last.troop) + 1
+            );
         }
         map[x][y] = unit;
         unit.x = x;
@@ -85,4 +113,11 @@ public class GameMap {
         return true;
     }
 
+    public Map<Relation, Point> getJIANGPoint() {
+        return JIANGPoint;
+    }
+
+    public Map<Relation, Map<Troop, Integer>> getRelationTroopCount() {
+        return relationTroopCount;
+    }
 }

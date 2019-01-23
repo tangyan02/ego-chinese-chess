@@ -6,6 +6,7 @@ public class Unit {
     public Integer y;
     public Troop troop;
     public Relation relation;
+    public int moveTimes = 0;
 
     @Override
     public String toString() {
